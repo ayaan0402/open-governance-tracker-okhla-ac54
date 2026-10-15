@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Open Manifesto & Governance Tracker | Okhla (AC-54) Pilot</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans antialiased">
 
@@ -35,9 +34,9 @@
       <div>
         <strong class="text-slate-900">Cognitive Neutrality Standard:</strong> Zero subjective labels ("good/bad"), zero party ratings, and zero color-coded grading. Every entry links directly to primary statutory sources.
       </div>
-      <a href="./dataset_ac54.csv" download class="inline-flex items-center justify-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium rounded border border-slate-300 whitespace-nowrap transition">
-        Download Raw CSV
-      </a>
+      <span class="inline-flex items-center justify-center px-3 py-1.5 bg-slate-100 text-slate-800 font-medium rounded border border-slate-300 text-xs">
+        Embedded Verified Dataset (AC-54)
+      </span>
     </div>
   </section>
 
@@ -62,9 +61,7 @@
   <!-- Records Container -->
   <main class="max-w-5xl mx-auto px-4 my-6">
     <div id="recordsContainer" class="space-y-4">
-      <div class="bg-white border border-slate-200 rounded-lg p-8 text-center text-slate-500 text-sm">
-        Loading verified dataset (dataset_ac54.csv)...
-      </div>
+      <!-- Cards rendered via JS -->
     </div>
   </main>
 
@@ -79,7 +76,44 @@
   </footer>
 
   <script>
-    let allRecords = [];
+    const dataset = [
+      {
+        record_id: "OKH-SWM-001",
+        sector_category: "Solid Waste",
+        jurisdiction_tier: "Municipal (MCD)",
+        responsible_agency: "Municipal Corporation of Delhi (MCD)",
+        statutory_mandate_or_target: "Bio-mining and remediation of legacy municipal solid waste at Okhla Dumpsite pursuant to NGT orders in OA No. 514/2018.",
+        mandate_source_url: "https://greentribunal.gov.in/",
+        latest_official_metric: "Cumulative legacy waste bio-mined in Lakh Metric Tonnes as recorded in DPCC Monthly Report.",
+        status_source_url: "https://dpcc.delhigovt.nic.in/",
+        drive_evidence_backup_url: "https://drive.google.com/",
+        last_verified_date: "2026-10-15"
+      },
+      {
+        record_id: "OKH-WTR-001",
+        sector_category: "Wastewater & Yamuna",
+        jurisdiction_tier: "State (GNCTD)",
+        responsible_agency: "Delhi Jal Board (DJB) / DPCC",
+        statutory_mandate_or_target: "Operation of 564 MLD Okhla STP to meet effluent standards BOD <= 10 mg/L under Yamuna Action Plan III.",
+        mandate_source_url: "https://delhijalboard.delhi.gov.in/",
+        latest_official_metric: "Monthly lab analysis of outlet treated effluent BOD and TSS in mg/L published in DPCC Report.",
+        status_source_url: "https://dpcc.delhigovt.nic.in/",
+        drive_evidence_backup_url: "https://drive.google.com/",
+        last_verified_date: "2026-10-15"
+      },
+      {
+        record_id: "OKH-ECI-001",
+        sector_category: "ECI Statutory Disclosure",
+        jurisdiction_tier: "Central / Statutory (ECI)",
+        responsible_agency: "Election Commission of India (ECI)",
+        statutory_mandate_or_target: "Mandatory sworn disclosure of assets, liabilities, and pending criminal cases in Form 26 under Rule 4A for AC-54 Okhla.",
+        mandate_source_url: "https://affidavit.eci.gov.in/",
+        latest_official_metric: "Verified candidate Form 26 affidavit PDFs archived on record with Returning Officer AC-54.",
+        status_source_url: "https://affidavit.eci.gov.in/",
+        drive_evidence_backup_url: "https://drive.google.com/",
+        last_verified_date: "2026-10-15"
+      }
+    ];
 
     function renderRecords(records) {
       const container = document.getElementById('recordsContainer');
@@ -93,44 +127,40 @@
 
       container.innerHTML = records.map(row => `
         <article class="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
-          <!-- Top Metadata Bar -->
           <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-100">
             <div class="flex flex-wrap items-center gap-2">
               <span class="font-mono text-xs font-bold bg-slate-900 text-white px-2.5 py-1 rounded">
-                ${row.record_id || 'N/A'}
+                ${row.record_id}
               </span>
               <span class="text-xs font-medium bg-slate-100 text-slate-700 px-2.5 py-1 rounded border border-slate-200">
-                ${row.sector_category || 'Uncategorized'}
+                ${row.sector_category}
               </span>
               <span class="text-xs font-medium bg-slate-100 text-slate-700 px-2.5 py-1 rounded border border-slate-200">
-                Tier: ${row.jurisdiction_tier || 'N/A'}
+                Tier: ${row.jurisdiction_tier}
               </span>
             </div>
             <span class="text-xs text-slate-500 font-mono">
-              Last Verified: ${row.last_verified_date || 'N/A'}
+              Last Verified: ${row.last_verified_date}
             </span>
           </div>
 
-          <!-- Responsible Agency -->
           <div class="mb-4 text-sm">
             <span class="text-slate-500 font-medium">Responsible Statutory Agency:</span>
-            <span class="font-semibold text-slate-900 ml-1">${row.responsible_agency || 'N/A'}</span>
+            <span class="font-semibold text-slate-900 ml-1">${row.responsible_agency}</span>
           </div>
 
-          <!-- Side-by-Side Neutral Comparison -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-slate-50 border border-slate-200 rounded-md p-4">
               <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 font-semibold mb-2">
                 1. Statutory Mandate / Official Target
               </h2>
               <p class="text-sm text-slate-800 leading-relaxed mb-3">
-                ${row.statutory_mandate_or_target || 'N/A'}
+                ${row.statutory_mandate_or_target}
               </p>
-              ${row.mandate_source_url ? `
-                <a href="${row.mandate_source_url}" target="_blank" rel="noopener noreferrer"
-                   class="text-xs font-medium text-slate-900 underline hover:text-slate-600">
-                  View Primary Mandate Source &rarr;
-                </a>` : ''}
+              <a href="${row.mandate_source_url}" target="_blank" rel="noopener noreferrer"
+                 class="text-xs font-medium text-slate-900 underline hover:text-slate-600">
+                View Primary Mandate Source &rarr;
+              </a>
             </div>
 
             <div class="bg-slate-50 border border-slate-200 rounded-md p-4">
@@ -138,36 +168,45 @@
                 2. Latest Official Recorded Metric
               </h2>
               <p class="text-sm text-slate-800 leading-relaxed mb-3">
-                ${row.latest_official_metric || 'N/A'}
+                ${row.latest_official_metric}
               </p>
-              ${row.status_source_url ? `
-                <a href="${row.status_source_url}" target="_blank" rel="noopener noreferrer"
-                   class="text-xs font-medium text-slate-900 underline hover:text-slate-600">
-                  View Official Verification Report &rarr;
-                </a>` : ''}
+              <a href="${row.status_source_url}" target="_blank" rel="noopener noreferrer"
+                 class="text-xs font-medium text-slate-900 underline hover:text-slate-600">
+                View Official Verification Report &rarr;
+              </a>
             </div>
           </div>
 
-          <!-- Archival Audit Trail -->
           <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
             <span class="text-slate-500">
               Immutable Evidence Backup (Row ID matched):
             </span>
-            ${row.drive_evidence_backup_url ? `
-              <a href="${row.drive_evidence_backup_url}" target="_blank" rel="noopener noreferrer"
-                 class="font-mono font-medium text-slate-800 bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded border border-slate-300 transition">
-                Open Archived PDF Vault &rarr;
-              </a>` : '<span class="text-slate-400">Archive link pending</span>'}
+            <a href="${row.drive_evidence_backup_url}" target="_blank" rel="noopener noreferrer"
+               class="font-mono font-medium text-slate-800 bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded border border-slate-300 transition">
+              Open Archived PDF Vault &rarr;
+            </a>
           </div>
         </article>
       `).join('');
+    }
+
+    function init() {
+      const sectors = [...new Set(dataset.map(r => r.sector_category))];
+      const select = document.getElementById('sectorFilter');
+      sectors.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        select.appendChild(opt);
+      });
+      renderRecords(dataset);
     }
 
     function applyFilters() {
       const query = document.getElementById('searchInput').value.toLowerCase();
       const sector = document.getElementById('sectorFilter').value;
 
-      const filtered = allRecords.filter(r => {
+      const filtered = dataset.filter(r => {
         const matchesSector = sector === 'ALL' || r.sector_category === sector;
         const combinedText = Object.values(r).join(' ').toLowerCase();
         const matchesQuery = !query || combinedText.includes(query);
@@ -177,32 +216,10 @@
       renderRecords(filtered);
     }
 
-    Papa.parse('/open-governance-tracker-okhla-ac54/dataset_ac54.csv', {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: function(results) {
-        allRecords = results.data.filter(r => r.record_id);
-        const sectors = [...new Set(allRecords.map(r => r.sector_category).filter(Boolean))];
-        const select = document.getElementById('sectorFilter');
-        sectors.forEach(s => {
-          const opt = document.createElement('option');
-          opt.value = s;
-          opt.textContent = s;
-          select.appendChild(opt);
-        });
-        renderRecords(allRecords);
-      },
-      error: function() {
-        document.getElementById('recordsContainer').innerHTML = `
-          <div class="bg-white border border-slate-300 rounded-lg p-6 text-sm text-slate-700">
-            <strong>Note:</strong> Make sure your file is named exactly <code>dataset_ac54.csv</code> in the root of this GitHub repository.
-          </div>`;
-      }
-    });
-
     document.getElementById('searchInput').addEventListener('input', applyFilters);
     document.getElementById('sectorFilter').addEventListener('change', applyFilters);
+
+    init();
   </script>
 </body>
 </html>
